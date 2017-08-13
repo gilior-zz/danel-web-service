@@ -21,7 +21,7 @@ namespace WebApplication58
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-        } 
+        }
 
         public IConfigurationRoot Configuration { get; }
 
@@ -42,12 +42,13 @@ namespace WebApplication58
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            AutoMapper.Mapper.Initialize(cfg => {
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
                 cfg.CreateMap<Entities.Holding, Dto.HoldingDto>()
-                .ForMember
+                .ForMember(nameof(Dto.HoldingDto.Amount), (i) => { i.MapFrom(nameof(Entities.Holding.SecurityAmount)); });
             });
 
-           app.UseMvc();
+            app.UseMvc();
         }
     }
 }

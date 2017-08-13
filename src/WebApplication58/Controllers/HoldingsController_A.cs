@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication58.Dto;
+using WebApplication58.Entities;
 
 namespace WebApplication58.Controllers
 {
@@ -16,19 +17,20 @@ namespace WebApplication58.Controllers
                                                [FromQuery] DateTime date,
                                               [FromQuery] Int16 groupID = 1)
         {
-            HodldingsDto hodldingsDto = new HodldingsDto();
+            Holdings holdings = new Holdings();
 
             for (int i = 0; i < 20; i++)
             {
-                HoldingDto h = new HoldingDto();
-                h.Name = i.ToString();
-                h.Number = new Random().Next();
-                h.Quantity = new Random().Next();
-                h.Rate = new Random().Next();
-                h.Amount = h.Quantity * h.Rate;
-                hodldingsDto.Hodldings.Add(h);
+                Holding h = new Holding();
+                h.SecurityName = i.ToString();
+                h.SecurityID = new Random().Next();
+                h.SecurityQuantity = new Random().Next(1000);
+                h.SecurityRate = new Random().Next(1000);
+                h.SecurityAmount = h.SecurityQuantity * h.SecurityRate;
+                holdings.Hodldings.Add(h);
             }
-            return Ok(hodldingsDto.Hodldings);
+            var res = AutoMapper.Mapper.Map<IEnumerable<Entities.Holding>, IEnumerable<Dto.HoldingDto>>(holdings.Hodldings);
+            return Ok(res);
         }
 
         // GET api/holdings_A/5
