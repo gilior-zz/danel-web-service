@@ -19,27 +19,7 @@ namespace WebApplication58.Controllers
         public HoldingsController(IHodldingsRepository HodldingsRepository)
         {
             this.hodldingsRepository = HodldingsRepository;
-        }
-
-
-        //api/holdings/accountHodlings?date=12-12-2012&entities=3,4&entitiesType=2&groupID=1
-        [HttpGet("accountHodlings")]
-        public IActionResult GetAccountHodlings([FromQuery] DateTime? date = null,
-                                               [FromQuery]  string entities = "",
-                                             [FromQuery]  Int16 entitiesType = 0,
-                                              [FromQuery] Int16 groupID = 0)
-        {
-            Hepler.GenerateModelState(date, date, entities, entitiesType, groupID, ModelState);
-
-            if (!ModelState.IsValid)
-                return new UnprocessableEntityObjectResult(ModelState);
-
-            var res = this.hodldingsRepository.GetHoldings(date.Value, date.Value, entities, entitiesType, groupID);
-
-            var dto = AutoMapper.Mapper.Map<IEnumerable<Entities.Holding>, IEnumerable<Dto.HoldingDto>>(res);
-
-            return Ok(dto);
-        }
+        }       
 
         //api/holdings/accountHodlingsB?dateFrom=12-12-2012&dateTo=12-12-2012&entities=3,4&entitiesType=2&groupID=1
         [HttpGet("accountHodlingsB")]
