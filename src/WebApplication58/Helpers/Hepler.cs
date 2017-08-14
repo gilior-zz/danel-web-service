@@ -8,34 +8,38 @@ namespace WebApplication58.Helpers
 {
     public static class Hepler
     {
-        public static void GenerateModelState(DateTime? date, string accounts, short groupID, ModelStateDictionary ModelState)
+        public static void GenerateModelState(DateTime? dateFrom, DateTime? dateTo, string entities, Int16 entitiesType, short groupID, ModelStateDictionary ModelState)
         {
             IEnumerable<int> acc = null;
 
-            if (accounts == null || string.IsNullOrEmpty(accounts.Trim()))
+            if (entities == null || string.IsNullOrEmpty(entities.Trim()))
                 ModelState.AddModelError("accounts problem", "must add accounts");
 
             else
                 try
                 {
-                    acc = accounts.Split(',').Select(i => int.Parse(i));
+                    acc = entities.Split(',').Select(i => int.Parse(i));
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("accounts problem", "illegal accounts format");
                 }
 
+            if (entitiesType <= 0) ModelState.AddModelError("entitiesType problem", "negative entitiesType not allowed");
+
 
 
             if (acc != null)
             {
-                var negative = acc.Any(i => 0 - i >= 0);
-                if (negative) ModelState.AddModelError("accounts problem", "negative accounts not allowed");
+                var negative = acc.Any(i => i <= 0);
+                if (negative) ModelState.AddModelError("entities problem", "negative accounts not allowed");
             }
 
 
-            if (date == null)
-                ModelState.AddModelError("date problem", "illegal date");
+            if (dateFrom == null)
+                ModelState.AddModelError("dateFrom problem", "illegal date");
+            if (dateTo == null)
+                ModelState.AddModelError("dateTo problem", "illegal date");
 
             if (0 - groupID >= 0)
                 ModelState.AddModelError("groupID problem", "illegal groupID");

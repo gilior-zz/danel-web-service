@@ -8,18 +8,20 @@ namespace WebApplication58.Entities
 
     public interface IHodldingsRepository
     {
-        IEnumerable<Holding> GetHoldings(DateTime date, string accounts, short groupID);
+        IEnumerable<Holding> GetHoldings(DateTime dateFrom, DateTime dateTo, string entities, Int16 entitiesType, short groupID);
     }
 
     public class HodldingsRepository : IHodldingsRepository
     {
-        public IEnumerable<Holding> GetHoldings(DateTime date, string accounts, short groupID)
+
+
+        public IEnumerable<Holding> GetHoldings(DateTime dateFrom, DateTime dateTo, string entities, short entitiesType, short groupID)
         {
             Holdings holdings = new Holdings();
             for (int i = 0; i < 20; i++)
             {
                 Holding h = new Holding();
-                h.HoldingDate = date;
+                h.HoldingDate = dateTo;
                 h.SecurityName = i.ToString();
                 h.SecurityID = new Random().Next();
                 h.SecurityQuantity = new Random().Next(1000);
