@@ -21,6 +21,8 @@ namespace WebApplication58.Dto
         public double Quantity { get; set; }
         public double Amount { get; set; }
         public double Rate { get; set; }
+        public int GroupId { get; set; }
+        public DateTime Date { get; set; }
     }
 
 }
