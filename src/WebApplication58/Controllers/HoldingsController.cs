@@ -59,23 +59,21 @@ namespace WebApplication58.Controllers
 
 
 
-        // api/holdings/accountHodlings/date/12-12-2012/entities/12,12,12/entitiesType/4/groupID/1
-        [HttpGet("accountHodlings/date/{date}/entities/{entities}/entitiesType/{entitiesType}/groupID/{groupID}")]
-        public IActionResult LoadAccountHodlings(DateTime? date = null,
-                                               string entities = "",
-                                              Int16 entitiesType = 0,
-                                             Int16 groupID = 0)
+        // api/holdings/accountHodlings/12-12-2012/12-12-2012/4,3/3/4
+        [HttpGet("accountHodlings/{dateFrom}/{dateTo}/{entities}/{entitiesType}/{groupID}")]
+        public IActionResult LoadAccountHodlings(HoldingsParams holdingsParams)
         {
-            Hepler.GenerateModelState(date, date, entities, entitiesType, groupID, ModelState);
+            Hepler.GenerateModelState(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID, ModelState);
 
             if (!ModelState.IsValid)
                 return new UnprocessableEntityObjectResult(ModelState);
 
-            var res = this.hodldingsRepository.GetHoldings(date.Value, date.Value, entities, entitiesType, groupID);
+            var res = this.hodldingsRepository.GetHoldings(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID);
 
             var dto = AutoMapper.Mapper.Map<IEnumerable<Entities.Holding>, IEnumerable<Dto.HoldingDto>>(res);
 
             return Ok(dto);
+
         }
 
 

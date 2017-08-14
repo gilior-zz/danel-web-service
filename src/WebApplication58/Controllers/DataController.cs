@@ -23,18 +23,14 @@ namespace WebApplication58.Controllers
 
         // api/data/12,13/3/12-12-2012/12-12-2014/accountGroupedHoldings/1
         [HttpGet("accountGroupedHoldings/{groupID}")]
-        public IActionResult GetGroupedHodlings(DateTime? dateFrom = null,
-                                                 DateTime? dateTo = null,
-                                              string entities = "",
-                                              Int16 entitiesType = 0,
-                                             Int16 groupID = 0)
+        public IActionResult GetGroupedHodlings(HoldingsParams holdingsParams)
         {
-            Hepler.GenerateModelState(dateFrom, dateTo, entities, groupID, entitiesType, ModelState);
+            Hepler.GenerateModelState(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID, ModelState);
 
             if (!ModelState.IsValid)
                 return new UnprocessableEntityObjectResult(ModelState);
 
-            var res = this.hodldingsRepository.GetHoldings(dateFrom.Value, dateTo.Value, entities, entitiesType, groupID);
+            var res = this.hodldingsRepository.GetHoldings(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID);
 
             var dto = AutoMapper.Mapper.Map<IEnumerable<Entities.Holding>, IEnumerable<Dto.HoldingDto>>(res);
 
@@ -44,18 +40,14 @@ namespace WebApplication58.Controllers
 
         // api/data/12,13/3/12-12-2012/12-12-2014/accountFlatHoldings
         [HttpGet("accountFlatHoldings")]
-        public IActionResult GetFlatHodlings(DateTime? dateFrom = null,
-                                             DateTime? dateTo = null,
-                                             string entities = "",
-                                              Int16 entitiesType = 0
-                                            )
+        public IActionResult GetFlatHodlings(HoldingsParams holdingsParams)
         {
-            Hepler.GenerateModelState(dateFrom, dateTo, entities, entitiesType, 1, ModelState);
+            Hepler.GenerateModelState(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID, ModelState);
 
             if (!ModelState.IsValid)
                 return new UnprocessableEntityObjectResult(ModelState);
 
-            var res = this.hodldingsRepository.GetHoldings(dateFrom.Value, dateTo.Value, entities, entitiesType, 1);
+            var res = this.hodldingsRepository.GetHoldings(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID);
 
             var dto = AutoMapper.Mapper.Map<IEnumerable<Entities.Holding>, IEnumerable<Dto.HoldingDto>>(res);
 
