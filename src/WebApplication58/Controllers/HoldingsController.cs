@@ -41,6 +41,22 @@ namespace WebApplication58.Controllers
             return Ok(dto);
         }
 
+        //api/holdings/accountHodlingsB?dateFrom=12-12-2012&dateTo=12-12-2012&entities=3,4&entitiesType=2&groupID=1
+        [HttpGet("accountHodlingsB")]
+        public IActionResult GetAccountHodlingsB(HoldingsParams holdingsParams)
+        {
+            Hepler.GenerateModelState(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID, ModelState);
+
+            if (!ModelState.IsValid)
+                return new UnprocessableEntityObjectResult(ModelState);
+
+            var res = this.hodldingsRepository.GetHoldings(holdingsParams.dateFrom, holdingsParams.dateTo, holdingsParams.entities, holdingsParams.entitiesType, holdingsParams.groupID);
+
+            var dto = AutoMapper.Mapper.Map<IEnumerable<Entities.Holding>, IEnumerable<Dto.HoldingDto>>(res);
+
+            return Ok(dto);
+        }
+
 
 
         // api/holdings/accountHodlings/date/12-12-2012/entities/12,12,12/entitiesType/4/groupID/1
